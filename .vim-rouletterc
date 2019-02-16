@@ -1,0 +1,32 @@
+"Function for getting random numbers
+function! Randnum(max) abort
+    return str2nr(matchstr(reltimestr(reltime()), '\v\.@<=\d+')[1:]) % a:max
+endfunction
+
+"feel free to change this to your language
+"alphabet of ascii characters from [a-z]
+let alphabet = map(range(char2nr('a'), char2nr('z')), 'nr2char(v:val)')
+
+"Create a map of all keys [a-z]
+let keyhash = {}
+
+for i in alphabet
+    let keyhash[i] = 0
+endfor
+
+"Now iterate over the map, and set it to a random key
+for key in keys(keyhash)
+
+    "look for a random letter that hasn't been used yet
+    while 1
+        let pos = Randnum(26)
+        let newkey = keys(keyhash)[pos]
+        if keyhash[newkey] == 1
+            continue
+        endif
+        break
+    endwhile
+    "Note: The only way to set dynamic bindings is via `execute [binding command as string]`
+    execute "nmap ". key . " " . newkey
+    let keyhash[newkey] = 1
+endfor
