@@ -21,12 +21,13 @@ for key in keys(keyhash)
     while 1
         let pos = Randnum(26)
         let newkey = keys(keyhash)[pos]
-        if keyhash[newkey] == 1
+        "Removing used keys and the same key (because that would be lame)
+        if keyhash[newkey] == 1 || key == newkey
             continue
         endif
         break
     endwhile
     "Note: The only way to set dynamic bindings is via `execute [binding command as string]`
-    execute "nmap ". key . " " . newkey
+    execute "noremap ". newkey . " " . key
     let keyhash[newkey] = 1
 endfor
